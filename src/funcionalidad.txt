@@ -1,0 +1,14 @@
+Twitter en React
+
+- Login con google y facebook
+- Signup -> crear el @usuario
+- Subir archivos
+- Mostrar imagenes y videos
+- Crear twit texto
+- Adjuntar imagen y video
+- Seguir/dejar de seguir usuarios
+- Armar el feed de twits
+- Like
+- Responder
+- Retwittear
+- Ver hilo

@@ -1,0 +1,24 @@
+.tweet {
+  margin: 16px;
+}
+
+.tweet-item {
+  margin: 16px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.tweet-item .content {
+  display: flex;
+  flex-direction: column;
+  margin-left: 8px;
+}
+
+.tweet-item .header {
+  display: flex;
+  font-size: 9pt;
+}
+
+.tweet-item .date {
+  margin-left: 8px;
+}

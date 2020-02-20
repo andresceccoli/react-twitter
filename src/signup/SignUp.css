@@ -1,0 +1,30 @@
+.signup {
+  font-weight: 200;
+}
+
+.signup p {
+  margin-bottom: 0;
+}
+
+.signup button {
+  margin-top: 32px;
+}
+
+.handle {
+  margin: 40px 0;
+}
+
+.handle span,
+.handle input {
+  font-size: 40px;
+  font-weight: 200;
+}
+
+.handle input {
+  border: none;
+  width: 200px;
+}
+
+.handle input:focus {
+  outline: none;
+}

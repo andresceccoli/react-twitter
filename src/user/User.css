@@ -1,0 +1,22 @@
+.user,
+.user-header {
+  display: flex;
+  flex-direction: row;
+  font-size: 9pt;
+  align-items: center;
+}
+
+.user .name,
+.user-header .name {
+  font-weight: bold;
+}
+
+.user .username,
+.user-header .username {
+  opacity: 0.6;
+  margin-left: 8px;
+}
+
+.user .name {
+  margin-left: 8px;
+}
