@@ -4,7 +4,7 @@ import './App.css';
 import SocialButton from './SocialButton';
 import { GOOGLE_SIGNIN_ID } from './keys';
 import * as firebase from 'firebase/app';
-import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import SignUp from './signup/SignUp';
 import HomeFeed from './feed/HomeFeed';
 
@@ -41,14 +41,11 @@ function App() {
     console.log('firebase initialized');
   }, []);
 
-console.log("eu", existingUser)
-
   return (
     <BrowserRouter>
       <Switch>
         <Route exact path="/">
-          {existingUser != null 
-            ? <HomeFeed /> :
+          {existingUser != null ? <HomeFeed /> :
             <div className="App">
               <header className="App-header">
                 {!user &&
