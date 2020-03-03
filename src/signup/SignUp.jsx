@@ -5,6 +5,8 @@ import { useDropzone } from "react-dropzone";
 import * as firebase from 'firebase/app';
 import "firebase/storage";
 import Cropper from "react-easy-crop";
+import Alert from "react-bootstrap/Alert";
+import { signup, auth } from "../api";
 
 function readFile(file) {
   return new Promise(resolve => {
@@ -15,17 +17,46 @@ function readFile(file) {
 }
 
 const SignUp = ({ externalUser, onComplete }) => {
+  const [error, setError] = useState();
+
   const [username, setUsername] = useState('');
 
   const onContinuar = () => {
+    if (username.trim().length === 0) {
+      setError('Ingrese su nombre de usuario');
+      return;
+    }
+
+    setError(undefined);
+
     const user = {
       username: username,
       name: externalUser.profile.name,
       email: externalUser.profile.email,
-      picture: externalUser.profile.profilePicURL
+      picture: uploadedUrl || externalUser.profile.profilePicURL
     };
-    localStorage.setItem("loggedUser", JSON.stringify(user));
-    onComplete(user);
+
+    signup(user)
+      .then(res => {
+        if (res.ok) {
+          auth(user.email)
+            .then(res => {
+              if (res.ok) {
+                return res.json();
+              } else {
+                alert("Usuario incorrecto");
+              }
+            })
+            .then(res => {
+              localStorage.setItem("loggedUser", res.token);
+              onComplete();
+            })
+            .catch(err => alert(err.message));
+        } else {
+          alert("Error al dar de alta el usuario");
+        }
+      })
+      .catch(err => alert(err.message));
   };
 
   const [uploadedUrl, setUploadedUrl] = useState();
@@ -80,6 +111,9 @@ const SignUp = ({ externalUser, onComplete }) => {
         <p>Elegí tu nombre de usuario</p>
         <span>@</span>
         <input type="text" name="username" placeholder="usuario" value={username} onChange={e => setUsername(e.target.value)} />
+        {error &&
+          <Alert variant="danger">{error}</Alert>
+        }
       </div>
       <p>{externalUser.profile.name}</p>
       <p>{externalUser.profile.email}</p>

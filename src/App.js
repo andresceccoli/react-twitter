@@ -6,25 +6,39 @@ import { GOOGLE_SIGNIN_ID } from './keys';
 import * as firebase from 'firebase/app';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import SignUp from './signup/SignUp';
-import HomeFeed from './feed/HomeFeed';
+import { userCheck } from './api';
+import Home from './home/Home';
 
 function App() {
   const [user, setUser] = useState();
 
   const handleLoginSuccess = (user) => {
     console.log(user);
-    setUser(user);
+
+    userCheck(user.profile.email)
+      .then(res => {
+        if (res.ok) {
+          // usuario existe
+
+        } else {
+          // usuario nuevo
+          setUser(user);
+        }
+      })
+      .catch(err => {
+        alert(err.message);
+      });
   };
   const handleLoginFailure = (err) => {
     alert(err);
     console.log(err);
   };
 
-  const [existingUser, setExistingUser] = useState();
+  const [loginOk, setLoginOk] = useState(false);
   useEffect(() => {
-    const u = localStorage.getItem("loggedUser");
-    if (u)
-      setExistingUser(JSON.parse(u));
+    const token = localStorage.getItem("loggedUser");
+    if (token) setLoginOk(true);
+    console.log('login ok');
   }, []);
 
   useEffect(() => {
@@ -45,7 +59,7 @@ function App() {
     <BrowserRouter>
       <Switch>
         <Route exact path="/">
-          {existingUser != null ? <HomeFeed /> :
+          {loginOk ? <Home /> :
             <div className="App">
               <header className="App-header">
                 {!user &&
@@ -63,7 +77,7 @@ function App() {
                     </p>
                   </div>
                 }
-                {user && <SignUp externalUser={user} onComplete={u => setExistingUser(user)}/>}
+                {user && <SignUp externalUser={user} onComplete={() => setLoginOk(true)}/>}
               </header>
             </div>
           }

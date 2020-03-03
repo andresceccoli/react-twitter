@@ -1,0 +1,14 @@
+#home {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 32px;
+}
+
+#home button {
+  margin-top: 16px;
+}
+
+.home-feed {
+  flex: 1;
+}
