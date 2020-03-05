@@ -6,8 +6,9 @@ import { GOOGLE_SIGNIN_ID } from './keys';
 import * as firebase from 'firebase/app';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import SignUp from './signup/SignUp';
-import { userCheck } from './api';
-import Home from './home/Home';
+import { userCheck, auth } from './api';
+import { Suspense } from 'react';
+const Home = React.lazy(() => import('./home/Home'));
 
 function App() {
   const [user, setUser] = useState();
@@ -19,7 +20,12 @@ function App() {
       .then(res => {
         if (res.ok) {
           // usuario existe
-
+          auth(user.profile.email)
+            .then(res => res.json())
+            .then(res => {
+              localStorage.setItem("loggedUser", res.token);
+              setLoginOk(true);
+            })
         } else {
           // usuario nuevo
           setUser(user);
@@ -59,7 +65,11 @@ function App() {
     <BrowserRouter>
       <Switch>
         <Route exact path="/">
-          {loginOk ? <Home /> :
+          {loginOk ? (
+            <Suspense fallback={<div>Cargando...</div>}>
+              <Home />
+            </Suspense>
+            ) :
             <div className="App">
               <header className="App-header">
                 {!user &&
